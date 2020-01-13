@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "superdigital.conta.model", "superdigital.conta.model\superdigital.conta.model.csproj", "{8797F064-B79D-48EF-AD75-CA5B558639A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "superdigital.conta.data", "superdigital.conta.data\superdigital.conta.data.csproj", "{1B732D17-25B5-48CA-B55E-6F4A02800DC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "superdigital.conta.service", "superdigital.conta.service\superdigital.conta.service.csproj", "{E6AD70A4-9745-472D-8FF7-AE8523A44B8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "superdigital.conta.web", "superdigital.conta.web\superdigital.conta.web.csproj", "{796F417E-8292-4BFC-A19A-A3EE05FA1295}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "superdigital.conta.testes", "superdigital.conta.testes\superdigital.conta.testes.csproj", "{23A152B3-8A70-4C2C-959E-6F012E92B941}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8797F064-B79D-48EF-AD75-CA5B558639A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8797F064-B79D-48EF-AD75-CA5B558639A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8797F064-B79D-48EF-AD75-CA5B558639A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8797F064-B79D-48EF-AD75-CA5B558639A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B732D17-25B5-48CA-B55E-6F4A02800DC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B732D17-25B5-48CA-B55E-6F4A02800DC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B732D17-25B5-48CA-B55E-6F4A02800DC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B732D17-25B5-48CA-B55E-6F4A02800DC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6AD70A4-9745-472D-8FF7-AE8523A44B8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6AD70A4-9745-472D-8FF7-AE8523A44B8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6AD70A4-9745-472D-8FF7-AE8523A44B8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6AD70A4-9745-472D-8FF7-AE8523A44B8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{796F417E-8292-4BFC-A19A-A3EE05FA1295}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{796F417E-8292-4BFC-A19A-A3EE05FA1295}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{796F417E-8292-4BFC-A19A-A3EE05FA1295}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{796F417E-8292-4BFC-A19A-A3EE05FA1295}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23A152B3-8A70-4C2C-959E-6F012E92B941}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23A152B3-8A70-4C2C-959E-6F012E92B941}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23A152B3-8A70-4C2C-959E-6F012E92B941}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23A152B3-8A70-4C2C-959E-6F012E92B941}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {62ADF599-8CB3-4472-A841-B57D3C578D35}
+	EndGlobalSection
+EndGlobal
