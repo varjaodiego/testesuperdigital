@@ -5,9 +5,10 @@ using superdigital.conta.model.Enum;
 using superdigital.conta.model.Interfaces;
 using superdigital.conta.model.MetaErrors;
 using superdigital.conta.model.Results;
+using superdigital.conta.service.Helpers;
 using superdigital.conta.service.Shared;
 using System;
-
+using System.Threading.Tasks;
 
 namespace superdigital.conta.service
 {
@@ -20,19 +21,30 @@ namespace superdigital.conta.service
 
         private readonly IContaCorrenteRepository contaCorrenteRepository;
 
-        public Result AdicionarContaCorrente(ContaCorrentePostRequest request)
+        public async Task<Result> AdicionarContaCorrente(ContaCorrentePostRequest request)
         {
-            bool parametrosValidados = ValidacaoParametrosEntradaAdicionar(request);
+            bool parametrosValidados = await ValidacaoParametrosEntradaAdicionar(request);
             if (!parametrosValidados)
-            {
-                Error(new MetaError(ListaErros.ParametrosNaoPodemSerVazio, StatusCode.Conflict));
-            }
+                return Error(new MetaError(ListaErros.ParametrosNaoPodemSerVazio, StatusCode.Conflict));
+
+            var documentoValido = await DocumentoValido(request.documento);
+            if (documentoValido)
+                return Error(new MetaError(ListaErros.DocumentoInvalido, StatusCode.Conflict));
+
+            var documentoExistente = await BuscarContaCorrentePorDocumento(request.documento);
+            if (documentoExistente != null)
+                return Error(new MetaError(ListaErros.DocumentoJaCadastrado, StatusCode.Conflict));
 
             var conta = EncapsularRequestParaModel(request);
 
-            this.contaCorrenteRepository.AdicionarContaCorrente(conta);
+            await this.contaCorrenteRepository.AdicionarContaCorrente(conta);
 
             return Success();
+        }
+
+        public async Task<bool> DocumentoValido(string documento)
+        {
+            return documento.Length == 11 ? documento.IsCpf() : documento.IsCnpj();
         }
 
         public ContaCorrente EncapsularRequestParaModel(ContaCorrentePostRequest request)
@@ -48,7 +60,7 @@ namespace superdigital.conta.service
 
         }
 
-        public bool ValidacaoParametrosEntradaAdicionar(ContaCorrentePostRequest request)
+        public async Task<bool> ValidacaoParametrosEntradaAdicionar(ContaCorrentePostRequest request)
         {
             var result = true;
 
@@ -64,11 +76,11 @@ namespace superdigital.conta.service
                 
         }
 
-        public Result AtualizarSaldo(ContaCorrente conta)
+        public async Task<Result> AtualizarSaldo(ContaCorrente conta)
         {
             try
             {
-                this.contaCorrenteRepository.AtualizarSaldo(conta);
+                await this.contaCorrenteRepository.AtualizarSaldo(conta);
             }
             catch (Exception ex)
             {
@@ -79,18 +91,18 @@ namespace superdigital.conta.service
             return Success();
         }
 
-        public Result<ContaCorrenteGetResponse> BuscarContaCorrentePorDocumento(string documento)
+        public async Task<Result<ContaCorrenteGetResponse>> BuscarContaCorrentePorDocumento(string documento)
         {
-            var conta = this.contaCorrenteRepository.BuscarContaCorrentePorDocumento(documento);
+            var conta = await this.contaCorrenteRepository.BuscarContaCorrentePorDocumento(documento);
 
             var result = EncapsularModelParaGetResponse(conta);
 
             return Success(result);
         }
 
-        public Result<ContaCorrenteGetResponse> BuscarContaCorrentePorNumeroConta(string numerocontacorrente)
+        public async Task<Result<ContaCorrenteGetResponse>> BuscarContaCorrentePorNumeroConta(string numerocontacorrente)
         {
-            var conta = this.contaCorrenteRepository.BuscarContaCorrentePorNumeroConta(numerocontacorrente);
+            var conta = await this.contaCorrenteRepository.BuscarContaCorrentePorNumeroConta(numerocontacorrente);
 
             var result = EncapsularModelParaGetResponse(conta);
 
@@ -113,26 +125,23 @@ namespace superdigital.conta.service
             };
         }
 
-        public Result CreditoContaCorrente(ContaCorrenteCreditoPostRequest request)
+        public async Task<Result> CreditoContaCorrente(ContaCorrenteCreditoPostRequest request)
         {
-            var isParameterValid = ValidarParametroCredito(request);
+            var isParameterValid = await ValidarParametroCredito(request);
             if (!isParameterValid)
                 return Error(new MetaError(ListaErros.ParametrosNaoPodemSerVazio, StatusCode.Conflict));
 
-            var contaCredito = ProcurarContaCorrente(request.numeroConta);
+            var contaCredito = await ProcurarContaCorrente(request.numeroConta);
             if (contaCredito == null)
-            {
                 return Error(new MetaError(ListaErros.ContaDestinoNaoEncontrada, StatusCode.Conflict));
-            }
-
+            
             contaCredito.saldo += request.valorCredito;
-            var result = AtualizarSaldo(contaCredito);
+            var result = await AtualizarSaldo(contaCredito);
 
             return Success(result);
 
-
         }
-        public bool ValidarParametroCredito(ContaCorrenteCreditoPostRequest request)
+        public async Task<bool> ValidarParametroCredito(ContaCorrenteCreditoPostRequest request)
         {
             var result = true;
             if (request.valorCredito <= decimal.Zero || string.IsNullOrEmpty(request.numeroConta))
@@ -141,9 +150,9 @@ namespace superdigital.conta.service
             return result;
         }
 
-        public ContaCorrente ProcurarContaCorrente(string numerocontacorrente)
+        public async Task<ContaCorrente> ProcurarContaCorrente(string numerocontacorrente)
         {
-            return this.contaCorrenteRepository.BuscarContaCorrentePorNumeroConta(numerocontacorrente);
+            return await this.contaCorrenteRepository.BuscarContaCorrentePorNumeroConta(numerocontacorrente);
 
              
         }

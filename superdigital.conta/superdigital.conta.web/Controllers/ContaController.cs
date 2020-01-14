@@ -32,9 +32,9 @@ namespace superdigital.conta.web.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(MetaError))]
         [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(MetaError))]
-        public IActionResult AddContaCorrente([FromBody] ContaCorrentePostRequest request )
+        public async Task<IActionResult> AddContaCorrente([FromBody] ContaCorrentePostRequest request )
         {
-            var cliente = this.contaCorrenteService.AdicionarContaCorrente(request);
+            var cliente = await this.contaCorrenteService.AdicionarContaCorrente(request);
 
             return HttpHelper.Convert(cliente);
 
@@ -49,9 +49,9 @@ namespace superdigital.conta.web.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(MetaError))]
         [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(MetaError))]
-        public IActionResult AddCreditoContaCorrente([FromBody] ContaCorrenteCreditoPostRequest request)
+        public async Task<IActionResult> AddCreditoContaCorrente([FromBody] ContaCorrenteCreditoPostRequest request)
         {
-            var cliente = this.contaCorrenteService.CreditoContaCorrente(request);
+            var cliente = await this.contaCorrenteService.CreditoContaCorrente(request);
 
             return HttpHelper.Convert(cliente);
 
@@ -66,9 +66,9 @@ namespace superdigital.conta.web.Controllers
         [Route("documento/{documento}")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(MetaError))]
-        public IActionResult GetCorrentistaPorDocumento(string documento)
+        public async Task<IActionResult> GetCorrentistaPorDocumento(string documento)
         {
-            var cliente = this.contaCorrenteService.BuscarContaCorrentePorDocumento(documento);
+            var cliente = await this.contaCorrenteService.BuscarContaCorrentePorDocumento(documento);
 
             return HttpHelper.Convert(cliente);
             
@@ -83,9 +83,9 @@ namespace superdigital.conta.web.Controllers
         [Route("numeroconta/{contacorrente}")]
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(MetaError))]
-        public IActionResult GetCorrentistaPorNumeroConta(string contacorrente)
+        public async Task<IActionResult> GetCorrentistaPorNumeroConta(string contacorrente)
         {
-            var cliente = this.contaCorrenteService.BuscarContaCorrentePorNumeroConta(contacorrente);
+            var cliente = await this.contaCorrenteService.BuscarContaCorrentePorNumeroConta(contacorrente);
 
             return HttpHelper.Convert(cliente);
 

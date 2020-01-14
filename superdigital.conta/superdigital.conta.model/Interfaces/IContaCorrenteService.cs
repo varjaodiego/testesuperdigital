@@ -1,16 +1,17 @@
 ﻿
 using superdigital.conta.model.Contracts.ContaCorrente;
 using superdigital.conta.model.Results;
+using System.Threading.Tasks;
 
 namespace superdigital.conta.model.Interfaces
 {
     public interface IContaCorrenteService
     {
-        Result AdicionarContaCorrente(ContaCorrentePostRequest conta);
-        Result AtualizarSaldo(ContaCorrente conta);
-        Result<ContaCorrenteGetResponse> BuscarContaCorrentePorNumeroConta(string numerocontacorrente);
-        Result<ContaCorrenteGetResponse> BuscarContaCorrentePorDocumento(string documento);
-        Result CreditoContaCorrente(ContaCorrenteCreditoPostRequest request);
+        Task<Result> AdicionarContaCorrente(ContaCorrentePostRequest conta);
+        Task<Result> AtualizarSaldo(ContaCorrente conta);
+        Task<Result<ContaCorrenteGetResponse>> BuscarContaCorrentePorNumeroConta(string numerocontacorrente);
+        Task<Result<ContaCorrenteGetResponse>> BuscarContaCorrentePorDocumento(string documento);
+        Task<Result> CreditoContaCorrente(ContaCorrenteCreditoPostRequest request);
 
     }
 }

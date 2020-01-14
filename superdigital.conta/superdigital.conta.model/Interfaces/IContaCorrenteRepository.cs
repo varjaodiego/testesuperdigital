@@ -1,11 +1,13 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace superdigital.conta.model.Interfaces
 {
     public interface IContaCorrenteRepository
     {
-        void AdicionarContaCorrente(ContaCorrente conta);
-        void AtualizarSaldo(ContaCorrente conta);
-        ContaCorrente BuscarContaCorrentePorNumeroConta(string numerocontacorrente);
-        ContaCorrente BuscarContaCorrentePorDocumento(string documento);
+        Task AdicionarContaCorrente(ContaCorrente conta);
+        Task AtualizarSaldo(ContaCorrente conta);
+        Task<ContaCorrente> BuscarContaCorrentePorNumeroConta(string numerocontacorrente);
+        Task<ContaCorrente> BuscarContaCorrentePorDocumento(string documento);
     }
 }

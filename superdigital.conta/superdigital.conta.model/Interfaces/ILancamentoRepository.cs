@@ -1,8 +1,10 @@
 ﻿
+using System.Threading.Tasks;
+
 namespace superdigital.conta.model.Interfaces
 {
     public interface ILancamentoRepository
     {
-        void Adicionar(Lancamento lancamento);
+        Task Adicionar(Lancamento lancamento);
     }
 }

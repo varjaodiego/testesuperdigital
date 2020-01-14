@@ -10,6 +10,7 @@ using System.Text;
 using superdigital.conta.model.Contracts.Lancamento;
 using superdigital.conta.model.Enum;
 using superdigital.conta.model.Constants;
+using System.Threading.Tasks;
 
 namespace superdigital.conta.service
 {
@@ -24,39 +25,50 @@ namespace superdigital.conta.service
         private readonly ILancamentoRepository lancamentoRepository;
         private readonly IContaCorrenteRepository contaCorrenteRepository;
 
-        public Result Adicionar(LancamentoTransferenciaPostRequest request)
+        public async Task<Result> Adicionar(LancamentoTransferenciaPostRequest request)
         {
             
             var parametroValidos = ValidarParametroTransferencia(request);
             if (!parametroValidos)
                 return Error(new MetaError(ListaErros.ParametrosNaoPodemSerVazio, StatusCode.Conflict));
 
-            var contaOrigemExistente = ProcurarContaCorrente(request.contaOrigem);
+            if (await OrigemDestinoIguais(request))
+                return Error(new MetaError(ListaErros.OrigemDestinoNaoPodemSerIguais, StatusCode.Conflict));
+            
+
+            var contaOrigemExistente = await ProcurarContaCorrente(request.contaOrigem);
             if (contaOrigemExistente == null)
                 return Error(new MetaError(ListaErros.ContaOrigemNaoEncontrada, StatusCode.Conflict));
 
-            var contaDestinoExistente = ProcurarContaCorrente(request.contaDestino);
+            var contaDestinoExistente = await ProcurarContaCorrente(request.contaDestino);
             if (contaDestinoExistente == null)
                 return Error(new MetaError(ListaErros.ContaDestinoNaoEncontrada, StatusCode.Conflict));
 
             if (contaOrigemExistente.saldo < request.valorTransacao)
                 return Error(new MetaError(ListaErros.SaldoInsuficiente, StatusCode.Conflict));
 
-            EfetivarLancamento(request);
+            await EfetivarLancamento(request);
 
-            AtualizarSaldosContas(contaOrigemExistente, contaDestinoExistente, request.valorTransacao);
+            await AtualizarSaldosContas(contaOrigemExistente, contaDestinoExistente, request.valorTransacao);
 
             return Success();
 
-            
-            
         }
 
-        public void EfetivarLancamento(LancamentoTransferenciaPostRequest request)
+        public async Task<bool> OrigemDestinoIguais(LancamentoTransferenciaPostRequest request)
+        {
+            var result = true;
+            if (request.contaDestino == request.contaOrigem)
+                result = false;
+
+            return result;
+        }
+
+        public async Task EfetivarLancamento(LancamentoTransferenciaPostRequest request)
         {
             var lancamento = EncapsularRequestParaModel(request);
 
-            this.lancamentoRepository.Adicionar(lancamento);
+            await this.lancamentoRepository.Adicionar(lancamento);
         }
 
         public Lancamento EncapsularRequestParaModel(LancamentoTransferenciaPostRequest request)
@@ -83,34 +95,34 @@ namespace superdigital.conta.service
 
         
 
-        public void AtualizarSaldosContas(ContaCorrente contaOrigem, ContaCorrente contaDestino, decimal valorTransacao)
+        public async Task AtualizarSaldosContas(ContaCorrente contaOrigem, ContaCorrente contaDestino, decimal valorTransacao)
         {
-            AtualizarSaldoOrigem(contaOrigem, valorTransacao);
+            await AtualizarSaldoOrigem(contaOrigem, valorTransacao);
 
-            AtualizarSaldoDestino(contaDestino, valorTransacao);
+            await AtualizarSaldoDestino(contaDestino, valorTransacao);
         }
 
-        public void AtualizarSaldoOrigem(ContaCorrente contaOrigem, decimal valorTransacao)
+        public async Task AtualizarSaldoOrigem(ContaCorrente contaOrigem, decimal valorTransacao)
         {
             contaOrigem.saldo -= valorTransacao;
             
-            AtualizarSaldo(contaOrigem);
+            await AtualizarSaldo(contaOrigem);
         }
 
-        public void AtualizarSaldoDestino(ContaCorrente contaDestino, decimal valorTransacao)
+        public async Task AtualizarSaldoDestino(ContaCorrente contaDestino, decimal valorTransacao)
         {
             contaDestino.saldo += valorTransacao;
-            AtualizarSaldo(contaDestino);
+            await AtualizarSaldo(contaDestino);
         }
 
-        public void AtualizarSaldo(ContaCorrente conta)
+        public async Task AtualizarSaldo(ContaCorrente conta)
         {
             this.contaCorrenteRepository.AtualizarSaldo(conta);
         }
 
-        public ContaCorrente ProcurarContaCorrente(string numeroConta)
+        public async Task<ContaCorrente> ProcurarContaCorrente(string numeroConta)
         {
-            return this.contaCorrenteRepository.BuscarContaCorrentePorNumeroConta(numeroConta);
+            return await this.contaCorrenteRepository.BuscarContaCorrentePorNumeroConta(numeroConta);
         }
 
         

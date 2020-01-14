@@ -1,17 +1,14 @@
-﻿using Moq;
-using superdigital.conta.model.Interfaces;
-using superdigital.conta.model.Contracts.ContaCorrente;
+﻿using superdigital.conta.model.Contracts.ContaCorrente;
 using superdigital.conta.model.Contracts.Lancamento;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-
-namespace superdigital.conta.testes
+namespace superdigital.conta.testesMSTest
 {
-    public class BaseTestes
+    public class BaseTest
     {
-        
+
         protected LancamentoTransferenciaPostRequest Contrucao_LancamentoTransferenciaPostRequest()
         {
             return new LancamentoTransferenciaPostRequest()
@@ -26,7 +23,7 @@ namespace superdigital.conta.testes
         {
             return new ContaCorrentePostRequest()
             {
-                documento = "50702618004",
+                documento = "21189153068",
                 nome = "Teste Mock",
                 tipoConta = 1,
                 tipoPessoa = 1

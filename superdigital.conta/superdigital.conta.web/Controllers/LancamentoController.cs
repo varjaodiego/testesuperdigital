@@ -38,10 +38,10 @@ namespace superdigital.conta.web.Controllers
         [SwaggerResponse((int)HttpStatusCode.OK)]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(MetaError))]
         [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(MetaError))]
-        public IActionResult AddLancamento([FromBody]LancamentoTransferenciaPostRequest request)
+        public async Task<IActionResult> AddLancamento([FromBody]LancamentoTransferenciaPostRequest request)
         {
             
-            var result = this.lancamentoService.Adicionar(request);
+            var result = await this.lancamentoService.Adicionar(request);
             return HttpHelper.Convert(result);
             
         }
